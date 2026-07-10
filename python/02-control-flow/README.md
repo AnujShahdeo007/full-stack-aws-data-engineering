@@ -3,6 +3,42 @@
 Control flow statements control the order in which instructions are executed in a program, based on conditions or repetition. Without control flow, code would just run top to bottom, one line after another, with no decisions or repetition.
 
 ---
+1. Conditional Statements
+
+1.1 if Statement
+1.2 if-else Statement
+1.3 if-elif-else Statement
+1.4 Nested if
+1.5 Ternary Operator (Conditional Expression)
+1.6 Logical Operators in Conditions (and, or, not)
+
+2. for Loop
+
+2.1 Looping Through a String
+2.2 range() Function
+2.3 Looping Through a Dictionary
+2.4 enumerate()
+2.5 Nested for Loop
+
+3. while Loop
+
+3.1 Infinite Loop
+3.2 while with User Input
+
+4. Loop Control Statements
+
+4.1 break
+4.2 continue
+4.3 pass
+
+5. else with Loops (for-else, while-else)
+6. Nested Loops with break/continue
+7. match-case (Structural Pattern Matching)
+8. Common Mistakes to Avoid
+9. Practice Program (FizzBuzz)
+
+
+
 
 # 1. Conditional Statements
 
