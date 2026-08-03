@@ -1,0 +1,53 @@
+# macOS
+.DS_Store
+
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment and credentials
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Spark
+spark-warehouse/
+metastore_db/
+derby.log
+logs/
+outputs/
+
+# IDE
+.idea/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# AWS local files
+.aws-sam/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/

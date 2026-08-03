@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true
+        },
+        {
+            "name": "PySpark: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/.venv/bin/python",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "JAVA_HOME": "${env:JAVA_HOME}",
+                "PYSPARK_PYTHON": "${workspaceFolder}/.venv/bin/python",
+                "PYSPARK_DRIVER_PYTHON": "${workspaceFolder}/.venv/bin/python"
+            },
+            "justMyCode": true
+        }
+    ]
+}

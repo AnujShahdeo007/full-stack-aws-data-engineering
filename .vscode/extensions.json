@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.vscode-python-envs",
+        "ms-toolsai.jupyter",
+        "eamodio.gitlens",
+        "redhat.vscode-yaml",
+        "mechatroner.rainbow-csv",
+        "mtxr.sqltools",
+        "hashicorp.terraform",
+        "ms-azuretools.vscode-docker",
+        "amazonwebservices.aws-toolkit-vscode"
+    ]
+}

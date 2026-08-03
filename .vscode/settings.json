@@ -1,0 +1,48 @@
+{
+    // ==========================
+    // Python
+    // ==========================
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+
+    // ==========================
+    // Jupyter
+    // ==========================
+    "jupyter.askForKernelRestart": false,
+    "jupyter.interactiveWindow.creationMode": "perFile",
+
+    // ==========================
+    // Editor
+    // ==========================
+    "editor.formatOnSave": true,
+    "editor.rulers": [88],
+    "editor.minimap.enabled": false,
+
+    // ==========================
+    // Files
+    // ==========================
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/.DS_Store": true
+    },
+
+    // ==========================
+    // Search
+    // ==========================
+    "search.exclude": {
+        "**/.venv": true,
+        "**/__pycache__": true
+    },
+
+    // ==========================
+    // Git
+    // ==========================
+    "git.autofetch": true,
+
+    // ==========================
+    // Notebook
+    // ==========================
+    "notebook.lineNumbers": "on"
+}

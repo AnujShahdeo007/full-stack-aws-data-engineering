@@ -1,0 +1,49 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Python: Verify Environment",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "-c",
+                "import sys; print(sys.executable); print(sys.version)"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Python: Install Requirements",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "-m",
+                "pip",
+                "install",
+                "-r",
+                "${workspaceFolder}/requirements.txt"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Jupyter: Start Lab",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "-m",
+                "jupyter",
+                "lab"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Spark: Verify Installation",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "-c",
+                "import pyspark; print('PySpark version:', pyspark.__version__)"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

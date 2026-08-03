@@ -1,0 +1,341 @@
+Types Of data :
+
+    - Structured Data : Data is orgnaixed into rows and columns with fixed schema 
+                      : Schema: Column names, Data types and Rules 
+                      : Chactertits :
+                            - Fixed Schema 
+                            - Organized in Rows and Columns 
+                            - Easy to search 
+                            - Easy Sort
+                            - Easy Update 
+                            - Easy Join 
+                            - Easy Anylyse 
+                        : MYSQL,Orcale,SQl Server 
+
+    - Semi Structured Data : Semi Structired data does not follow table format but contains tags,keys or metadata 
+    {
+        "emp_id::101,
+        "emp_name:"Rahul"
+    }
+
+    JSON
+    XML
+    YAML
+    AVRO
+    BSON
+
+    Advantage:
+    - Flexible Schema 
+
+
+
+    - Unstructured Data : No Predefined format or schema  
+
+    - photos 
+    - videos 
+    - Audio Files 
+    - Emails 
+    - Word Documents 
+    - CCTV Footage 
+    - Voice recoding 
+
+
+Module -1 
+----------
+
+Big Data 
+
+Charactertistics 
+
+- Masssive in size 
+- Genrated Continiouly 
+- Comes indiffrent formate 
+- Requires a distributed storage 
+- Requires distributed processing 
+- Need Falut tolrance 
+- Must scale easily as data grows 
+
+
+Big Data Ecosystem 
+------------------
+
+
+                                            Data Sources 
+-----------------------------------------------------------------------------------------------------------
+Databses | APIs | Mobile Apps | IoT | Sensors | Logs | Social Media | Files 
+
+-----------------------------------------------------------------------------------------------------------
+                                            Data Ingestion 
+-----------------------------------------------------------------------------------------------------------
+                        Sqoop                   Flume               Kafka    
+-----------------------------------------------------------------------------------------------------------
+                                         Distributed Storage    
+-----------------------------------------------------------------------------------------------------------
+                        HDFS    |           S3              | ADLS   
+-----------------------------------------------------------------------------------------------------------
+                                        Resource Management 
+-----------------------------------------------------------------------------------------------------------
+                                                YARN 
+-----------------------------------------------------------------------------------------------------------
+                                            Data Processing Layer 
+-----------------------------------------------------------------------------------------------------------
+                            MapReduce                   Hive 
+-----------------------------------------------------------------------------------------------------------
+                                    Data ware house and Analyitcs 
+-----------------------------------------------------------------------------------------------------------
+    HBase       Cassandra               Redshift 
+-----------------------------------------------------------------------------------------------------------
+                                    Visulization/ BI/ML Layer 
+-----------------------------------------------------------------------------------------------------------
+    Power BI    | tablue    | Superset  | Machine Learning  | AI Models   
+
+
+
+Data Sources :
+
+
+MYSQL 
+Salesforce 
+SQL Server 
+SAP 
+APIs 
+CSV Files 
+Json Files 
+IOT devices 
+Mobile Apps 
+Social Media 
+
+
+Data Ingestion layer 
+
+-----------------------------------------------------------------------------------------------------------
+
+Hadoop :
+
+Core Components :
+
+    - HDFS 
+        - 
+    - YARN 
+    - MAP reduce 
+
+
+ txt
+ 
+Spark is Fast 
+Spark is Powerful
+Hadoop is reliable 
+Spark is Easy 
+-----------------------------------------------------------------------------------------------
+
+Why Was Hadoop Created?
+
+Imagine you’re working at Netflix.
+
+Every second:
+
+* Millions of users watch movies.
+* Millions search for shows.
+* Millions pause, rewind, and rate content.
+
+Every action generates data.
+
+Suppose Netflix generates 500 TB of data every day.
+
+Where will you store it?
+A normal laptop has about 512 GB of storage.
+A powerful server might have 10 TB of storage.
+
+To store 500 TB, you would need around 50 servers, and tomorrow you’ll need 50 more because another 500 TB of data arrives.
+So the data keeps growing continuously.
+
+This is called Big Data.
+
+The Traditional Approach
+--------------------------
+Before Hadoop, companies used one very powerful machine.
+This is called Vertical Scaling.
+
+              One Powerful Server
+
+         CPU: 128 Cores
+         RAM: 2 TB
+         Storage: 500 TB
+
+Everything happens on this one machine.
+
+
+Problem 1: Cost
+----------------
+
+A server like this is extremely expensive.
+
+Instead of buying one massive server, companies realized they could buy many inexpensive commodity servers.
+
+Server 1    ₹1 lakh
+Server 2    ₹1 lakh
+Server 3    ₹1 lakh
+...
+100 Servers = ₹1 crore
+
+These servers together provide more storage and computing power, often at a lower cost than a single high-end machine.
+
+Problem 2: Failure
+------------------
+Imagine all your company data is stored on one server.
+
+         Customer Data
+
+              |
+        Powerful Server
+
+
+ Now imagine the hard disk fails.
+
+          Customer Data
+
+              X
+
+         Server Failed
+
+Everything stops.
+Customers cannot access the application.
+This is called a Single Point of Failure.   
+
+
+Problem 3: Performance
+---------------------
+
+Suppose you have a 10 TB log file.
+One CPU has to read:
+Line 1
+
+Line 2
+
+Line 3
+
+...
+
+10 TB
+
+Even if it processes 100 MB/sec, it would take a very long time.
+So a single machine becomes a bottleneck.
+
+A Better Idea
+----------------
+
+Instead of using one giant computer…
+What if we use 100 small computers?
+
+Computer 1
+
+Computer 2
+
+Computer 3
+
+...
+
+Computer 100
+
+Now the work is divided.
+Each computer processes only a small part of the data.
+If each computer processes 100 GB:
+
+100 Computers
+
+↓
+
+100 GB each
+
+↓
+
+10 TB completed much faster
+
+This is called Distributed Computing.
+
+
+What Does “Distributed” Mean?
+
+The word distributed simply means:
+Split the work among many machines.
+For example, imagine 100 students are asked to count the number of words in a library.
+
+Option 1
+One student counts every book.
+Time: 10 days
+
+Option 2
+100 students each count a few books.
+Time: 2 hours
+
+The total work is the same.
+But because everyone works in parallel, the job finishes much faster.
+
+This is exactly how Hadoop works.
+
+
+What Hadoop Does
+-----------------
+Hadoop combines two ideas:
+
+1. Distributed Storage
+
+Instead of storing a file on one computer:
+
+Server 1
+
+Entire File
+
+Hadoop splits the file.
+
+Server 1
+
+Part 1
+
+------------------
+
+Server 2
+
+Part 2
+
+------------------
+
+Server 3
+
+Part 3
+
+2. Distributed Processing
+
+Instead of one CPU processing everything:
+
+CPU
+
+↓
+
+Entire File
+
+Each server processes only its own data.
+
+Server 1
+
+Process Part 1
+
+----------------
+
+Server 2
+
+Process Part 2
+
+----------------
+
+Server 3
+
+Process Part 3
+
+Then Hadoop combines all the results into one final output.
+
+
+Hadoop Cluster 
+----------------
+
+
