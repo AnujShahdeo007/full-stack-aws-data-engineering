@@ -1,0 +1,794 @@
+1. Why Do We Need Spark?
+
+Imagine you have a CSV file of 5 TB.
+
+A normal Python program would
+
+Read File
+↓
+
+Store in RAM
+↓
+
+Process
+↓
+
+Write Output
+
+Problems:
+
+Single CPU
+Limited RAM
+Very slow
+Cannot process TBs of data efficiently
+
+Now imagine we have 10 machines.
+
+Instead of one machine processing the file,
+
+Machine 1 → 500 GB
+
+Machine 2 → 500 GB
+
+Machine 3 → 500 GB
+
+...
+
+Machine 10 → 500 GB
+
+Now every machine works simultaneously.
+
+This is called
+
+Distributed Computing
+
+Spark is a distributed computing engine.
+
+
+2. What is Apache Spark?
+
+Definition (Interview):
+
+Apache Spark is an open-source distributed data processing engine designed for high-speed large-scale data processing using in-memory computation.
+
+Keywords
+
+Distributed
+Parallel
+In-memory
+Fault Tolerant
+Fast
+
+3. Big Picture Architecture
+
+                    User
+
+                      │
+
+          spark-submit / Notebook
+
+                      │
+
+                      ▼
+
+             +-------------------+
+             |      Driver       |
+             |-------------------|
+             | SparkSession      |
+             | SparkContext      |
+             | DAG Scheduler     |
+             | Task Scheduler    |
+             | Job Manager       |
+             +-------------------+
+                       │
+                       │
+            Requests Resources
+                       │
+                       ▼
+
+            +----------------------+
+            | Cluster Manager      |
+            |----------------------|
+            | Standalone           |
+            | YARN                 |
+            | Kubernetes           |
+            | Mesos                |
+            +----------------------+
+                 │        │
+                 │        │
+         ------------------------------
+         │              │             │
+         ▼              ▼             ▼
+
+ +----------------+ +----------------+ +----------------+
+ | Executor 1     | | Executor 2     | | Executor 3     |
+ |----------------| |----------------| |----------------|
+ | CPU Cores      | | CPU Cores      | | CPU Cores      |
+ | Memory         | | Memory         | | Memory         |
+ | Cache          | | Cache          | | Cache          |
+ | Tasks          | | Tasks          | | Tasks          |
+ +----------------+ +----------------+ +----------------+
+
+
+This is Spark Architecture.
+
+Everything revolves around these four components.
+
+Driver
+Cluster Manager
+Executors
+Worker Nodes
+
+4. Real Life Analogy (Pizza Shop)
+
+Imagine Domino's receives an order for
+
+10 pizzas.
+
+Customer
+
+You place the order.
+
+Customer
+
+↓
+
+Order 10 Pizzas
+
+Equivalent to
+        You write PySpark Code
+
+Restaurant Manager
+
+The manager
+
+receives order
+plans work
+assigns cooks
+monitors progress
+
+Spark equivalent
+
+        Driver 
+
+Kitchen Supervisor
+
+Manager asks
+
+"I need 5 chefs."
+
+Kitchen supervisor allocates chefs.
+
+Spark equivalent
+        Cluster Manager
+
+Chefs
+
+Every chef prepares pizzas independently.
+
+Spark equivalent
+        Executors
+
+Pizza Sections
+
+Each chef makes
+
+dough
+sauce
+cheese
+
+Each small work
+
+=
+
+Task
+
+
+
+Final Delivery
+
+Manager collects all pizzas
+
+delivers to customer.
+
+Driver collects results.
+
+Complete    Mapping
+Pizza Shop	Spark
+Customer	User
+Order	    Spark Application
+Manager 	Driver
+Kitchen     Supervisor	Cluster Manager
+Chef	    Executor
+Pizza Piece	Task
+Restaurant	Cluster
+
+
+5. Components of Spark Architecture
+
+Component 1
+Driver
+
+The Driver is the brain of Spark.
+
+Without Driver,
+
+Spark cannot run.
+
+Driver Responsibilities
+
+Receive Program
+
+↓
+
+Create Execution Plan
+
+↓
+
+Request Resources
+
+↓
+
+Schedule Tasks
+
+↓
+
+Monitor Execution
+
+↓
+
+Collect Results
+
+
+Everything begins here.
+
+Internally Driver contains
+
+SparkSession
+
+↓
+
+SparkContext
+
+↓
+
+DAG Scheduler
+
+↓
+
+Task Scheduler
+
+↓
+
+Scheduler Backend
+
+
+Each one has a responsibility.
+
+SparkSession
+
+Highest level API.
+
+Created by
+
+spark = SparkSession.builder \
+    .appName("Learning") \
+    .getOrCreate()
+
+SparkSession is your entry point.
+
+SparkContext
+
+Low level connection with Spark Cluster.
+
+Responsibilities
+
+connect cluster
+create RDD
+communicate with executors
+DAG Scheduler
+
+Creates DAG.
+
+Groups transformations into stages.
+
+Task Scheduler
+
+Converts stages into tasks.
+
+Assigns tasks to executors.
+
+Scheduler Backend
+
+Communicates with Cluster Manager.
+
+Driver Flow
+Receive Code
+
+↓
+
+Analyze Code
+
+↓
+
+Create DAG
+
+↓
+
+Create Stages
+
+↓
+
+Create Tasks
+
+↓
+
+Send Tasks
+
+↓
+
+Receive Result
+
+Component 2
+Cluster Manager
+
+Driver cannot create machines.
+
+Driver only says
+
+I need
+
+8 Executors
+
+8 GB each
+
+4 cores each
+
+Cluster Manager allocates them.
+
+Supported Cluster Managers
+
+Standalone
+
+YARN
+
+Kubernetes
+
+Mesos
+
+Responsibilities
+
+Allocate Resources
+Launch Executors
+Monitor Executors
+Restart Failed Executors
+
+Think of it as
+
+Cloud Resource Manager.
+
+Component 3
+Worker Node
+
+Worker Node
+
+is simply
+
+A Machine.
+
+CPU
+
+RAM
+
+Disk
+
+Network
+
+
+Each worker can run multiple executors.
+
+Example
+
+Worker 1
+
+CPU = 16
+
+RAM = 64 GB
+
+Executors = 2
+Component 4
+Executor
+
+Executor is where actual computation happens.
+
+Executors
+
+execute tasks
+cache data
+shuffle data
+return result
+
+Executor Architecture
+
++-----------------------+
+
+Executor
+
+-----------------------
+
+Memory
+
+CPU Cores
+
+Cache
+
+Shuffle
+
+Task Threads
+
++-----------------------+
+
+Executor Responsibilities
+
+Execute Tasks
+Store Cached Data
+Shuffle Data
+Return Results
+
+Executors never talk directly to each other.
+
+Communication happens through Spark's shuffle mechanism coordinated by the framework.
+
+6. Complete Execution Flow
+
+Suppose
+
+df = spark.read.csv("sales.csv")
+
+result = df.filter(df.amount > 500)
+
+result.groupBy("city").sum()
+
+result.show()
+
+Step 1
+
+Spark reads code.
+
+Driver
+
+↓
+
+Read Program
+
+Step 2
+
+Spark notices
+
+No Action yet.
+
+Only Transformations.
+
+Nothing executes.
+
+Step 3
+
+show()
+
+appears.
+
+Now Spark starts execution.
+
+Step 4
+
+Driver creates DAG.
+
+Read
+
+↓
+
+Filter
+
+↓
+
+GroupBy
+
+↓
+
+Sum
+
+↓
+
+Show
+
+Step 5
+
+Driver requests executors.
+
+Need
+
+4 Executors
+
+Step 6
+
+Cluster Manager launches Executors.
+
+Step 7
+
+Tasks distributed.
+
+Executor 1
+
+Partition 1
+
+Executor 2
+
+Partition 2
+
+Executor 3
+
+Partition 3
+
+Executor 4
+
+Partition 4
+
+Step 8
+
+Executors process data.
+
+Step 9
+
+Results returned.
+
+Step 10
+
+Driver prints output.
+
+7. Internal Architecture
+                User Code
+
+                    │
+
+                    ▼
+
+             SparkSession
+
+                    │
+
+             SparkContext
+
+                    │
+
+             DAG Scheduler
+
+                    │
+
+            Creates DAG
+
+                    │
+
+             Creates Stages
+
+                    │
+
+             Task Scheduler
+
+                    │
+
+            Creates Tasks
+
+                    │
+
+           Cluster Manager
+
+                    │
+
+      Allocates Executors
+
+                    │
+
+          Executors Execute
+
+                    │
+
+          Return Results
+
+                    │
+
+              Driver
+
+                    │
+
+            Output Display
+8. Example
+
+Suppose
+
+1 Billion Records
+
+Spark divides
+
+Partition 1
+
+Partition 2
+
+Partition 3
+
+Partition 4
+
+Executor Allocation
+
+Executor 1
+
+Partition 1
+
+Executor 2
+
+Partition 2
+
+Executor 3
+
+Partition 3
+
+Executor 4
+
+Partition 4
+
+All execute simultaneously.
+
+This is Parallel Processing.
+
+9. What Happens Internally?
+
+Imagine
+
+100 GB File
+
+Spark divides
+
+25 GB
+
+25 GB
+
+25 GB
+
+25 GB
+
+Each executor receives one partition.
+
+Executor 1
+
+↓
+
+Task 1
+
+Executor 2
+
+↓
+
+Task 2
+
+Executor 3
+
+↓
+
+Task 3
+
+Executor 4
+
+↓
+
+Task 4
+
+All work together.
+
+10. Driver vs Executor
+
+Driver	        Executor
+Brain	        Worker
+Plans work	    Executes work
+Creates DAG	    Runs Tasks
+Creates Stages	Processes Data
+Schedules Tasks	Stores Cache
+Collects Result	Sends Result
+
+11. Cluster Manager vs Worker
+
+Cluster Manager	    Worker
+Allocates Resources	Executes Tasks
+Starts Executors	Hosts Executors
+Monitors Cluster	Uses CPU/RAM
+
+12. Worker vs Executor
+
+Worker	            Executor
+Physical Machine	JVM Process
+Has CPU & RAM	    Uses CPU & RAM
+Can host multiple   Executors Runs Tasks
+
+13. Complete Flow Diagram
+
+                User
+
+                  │
+
+                  ▼
+
+        spark-submit / Notebook
+
+                  │
+
+                  ▼
+
+        +-------------------+
+        | SparkSession      |
+        +-------------------+
+                  │
+
+                  ▼
+
+        +-------------------+
+        | SparkContext      |
+        +-------------------+
+                  │
+
+                  ▼
+
+        +-------------------+
+        | DAG Scheduler     |
+        +-------------------+
+                  │
+
+                  ▼
+
+        +-------------------+
+        | Task Scheduler    |
+        +-------------------+
+                  │
+
+                  ▼
+
+        +-------------------+
+        | Cluster Manager   |
+        +-------------------+
+           │      │      │
+
+           ▼      ▼      ▼
+
+      Executor Executor Executor
+
+           │      │      │
+
+           ▼      ▼      ▼
+
+       Process Data
+
+           │
+
+           ▼
+
+      Driver Collects
+
+           │
+
+           ▼
+
+      Show Output
+14. Interview Explanation
+
+Apache Spark follows a master-worker architecture. The Driver acts as the brain of the application. It contains the SparkSession, SparkContext, DAG Scheduler, and Task Scheduler. When a Spark application starts, the Driver analyzes the code, builds a DAG of transformations, divides it into stages and tasks, and requests resources from the Cluster Manager. The Cluster Manager allocates executors on worker nodes. Executors are JVM processes responsible for executing tasks in parallel, caching data in memory, performing shuffle operations, and returning results to the Driver. The Driver monitors execution and combines the final output. This distributed architecture allows Spark to process massive datasets efficiently using parallel execution and in-memory computation.
+
+15. Key Interview Points to Remember
+
+Spark uses a Master–Worker Architecture.
+The Driver is the brain of the Spark application.
+SparkSession is the entry point for DataFrame and SQL APIs.
+SparkContext is the low-level connection to the Spark cluster.
+The DAG Scheduler creates stages from transformations.
+The Task Scheduler creates and assigns tasks to executors.
+The Cluster Manager allocates cluster resources but does not execute data processing.
+Worker Nodes are physical or virtual machines that host executors.
+Executors are JVM processes that execute tasks, cache data, and return results.
+A Job is created only when an Action (such as show(), collect(), count(), or write()) is called.
+Spark achieves high performance through parallel processing, in-memory computation, and fault tolerance.
