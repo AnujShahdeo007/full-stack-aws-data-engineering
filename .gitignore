@@ -51,3 +51,20 @@ outputs/
 build/
 dist/
 *.egg-info/
+# VS Code Workspace
+*.code-workspace
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Python
+*.pyc
+*.pyo
+
+# Notebook
+.ipynb_checkpoints/
+
+# Spark
+spark-warehouse/
+metastore_db/
