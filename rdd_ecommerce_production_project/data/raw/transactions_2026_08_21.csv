@@ -1,5 +1,5 @@
 transaction_id,customer_id,product_id,product_name,category,quantity,unit_price,amount,payment_method,status,transaction_timestamp,city
-T0000001,C02286,P012,Cooking Oil,Grocery,ABC,937,2811,NETBANKING,FAILED,2026-08-21 03:30:47,Kolkata
+T0000001,C02286,P012,Cooking Oil,Grocery,2,ABC,2811,NETBANKING,FAILED,2026-08-21 03:30:47,Kolkata
 T0000002,C03887,P025,Running Shoes,Sports,1,3431,3431,COD,SUCCESS,2026-08-21 13:46:00,Mumbai
 T0000003,C03449,P004,Television,Electronics,1,34078,34078,WALLET,SUCCESS,2026-08-21 00:21:43,Chennai
 T0000004,C01077,P010,Backpack,Fashion,4,1393,5572,CARD,PENDING,2026-08-21 20:49:09,Kolkata

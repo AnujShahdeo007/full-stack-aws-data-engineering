@@ -2,6 +2,9 @@ from src.spark_session import create_spark_context
 from src.ingestion import read_transaction_file,remove_header
 from src.partition_utils import get_partition_record_count
 from src.parser import parse_transaction
+from src.validators import validate_transactions
+from src.transformations import format_parsing_rejects,format_validation_rejects
+
 
 
 def main():
@@ -11,6 +14,7 @@ def main():
     try:
 
         file_path = "data/raw/transactions_2026_08_21.csv"
+        reject_output_path="data/rejected/transactions_2026_08.csv"
 
         raw_rdd = read_transaction_file(
             sc,
@@ -33,13 +37,38 @@ def main():
 
         valid_transaction_rdd=valid_parsad_rdd.map(lambda record:record[1])
 
-        print("Valid parsed sample")
-        for record in valid_transaction_rdd.take(3):
+        validated_rdd=valid_transaction_rdd.map(validate_transactions)
+
+        buiness_valid_rdd=validated_rdd.filter(lambda record:record[0]=="VALID")
+
+        buiness_invalid_rdd=validated_rdd.filter(lambda record:record[0]=="INVALID")
+
+        clean_transactions_rdd=buiness_valid_rdd.map(lambda record:record[1])
+
+        # print("\nBusiness validation failures")
+        # for record in buiness_invalid_rdd.take(10):
+        #     print(record)
+
+        formatted_parsing_rejects_rdd=invalid_parsad_rdd.map(format_parsing_rejects)
+        formatted_validation_rejects_rdd=buiness_invalid_rdd.map(format_validation_rejects)
+
+        all_rejected_rdd=formatted_parsing_rejects_rdd.union(formatted_validation_rejects_rdd)
+
+        print("\nData")
+        for record in all_rejected_rdd.take(10):
             print(record)
 
-        print("Invalid Parsing samples ")
-        for record in invalid_parsad_rdd.take(3):
-            print(record)
+        all_rejected_rdd.saveAsTextFile(reject_output_path)
+        
+
+
+        # print("Valid parsed sample")
+        # for record in valid_transaction_rdd.take(3):
+        #     print(record)
+
+        # print("Invalid Parsing samples ")
+        # for record in invalid_parsad_rdd.take(3):
+        #     print(record)
 
         # sample_records=parsed_rdd.take(3)
         # print("parsad records: ")
