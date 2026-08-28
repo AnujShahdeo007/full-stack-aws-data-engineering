@@ -4,6 +4,8 @@ from src.partition_utils import get_partition_record_count
 from src.parser import parse_transaction
 from src.validators import validate_transactions
 from src.transformations import format_parsing_rejects,format_validation_rejects
+from pathlib import Path
+from src.common.utils import generate_run_id
 
 
 
@@ -12,9 +14,15 @@ def main():
     sc = create_spark_context()
 
     try:
-
+        run_id=generate_run_id()
         file_path = "data/raw/transactions_2026_08_21.csv"
-        reject_output_path="data/rejected/transactions_2026_08.csv"
+        source_file=Path(file_path).name
+        reject_output_path=(
+            f"data/rejected/"
+            f"{source_file.replace('.csv','')}_{run_id}"
+        )
+
+                            
 
         raw_rdd = read_transaction_file(
             sc,
@@ -49,8 +57,12 @@ def main():
         # for record in buiness_invalid_rdd.take(10):
         #     print(record)
 
-        formatted_parsing_rejects_rdd=invalid_parsad_rdd.map(format_parsing_rejects)
-        formatted_validation_rejects_rdd=buiness_invalid_rdd.map(format_validation_rejects)
+        formatted_parsing_rejects_rdd=invalid_parsad_rdd.map(
+            lambda record:format_parsing_rejects(record,run_id,source_file)
+        )
+        formatted_validation_rejects_rdd=buiness_invalid_rdd.map(
+            lambda record:format_validation_rejects(record,run_id,source_file)
+        )
 
         all_rejected_rdd=formatted_parsing_rejects_rdd.union(formatted_validation_rejects_rdd)
 
