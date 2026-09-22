@@ -2,4 +2,4 @@ emp_id,emp_name,department,salary
 202,Rahul,NA,30000
 203,Priya,FIN,
 204,Amit,NULL,60000
-205,"",IT,90000
+205,<EMPTY>,IT,90000

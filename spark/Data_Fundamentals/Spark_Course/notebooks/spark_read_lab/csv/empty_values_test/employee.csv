@@ -1,0 +1,4 @@
+emp_id,emp_name,department,salary
+201,A,IT,50000
+202,<EMPTY>,HR,6000
+203,AB,FIN,7000
